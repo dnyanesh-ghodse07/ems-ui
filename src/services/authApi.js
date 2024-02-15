@@ -1,9 +1,9 @@
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 
-// const BASE_URL = "https://ems-app-cmw3.onrender.com/api/v1/users";
+const BASE_URL = "https://ems-app-cmw3.onrender.com/api/v1/users";
 
-const BASE_URL = "http://localhost:8000/api/v1/users";
+// const BASE_URL = "http://localhost:8000/api/v1/users";
 
 export const api = axios.create({
   baseURL: BASE_URL,
