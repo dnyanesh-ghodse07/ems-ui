@@ -1,21 +1,25 @@
 import axios from "axios";
-import { jwtDecode } from "jwt-decode";
 
-const BASE_URL = "https://ems-app-cmw3.onrender.com/api/v1/users";
+// const BASE_URL = "https://ems-app-cmw3.onrender.com/api/v1/users";
+const token = localStorage.getItem("token");
 
-// const BASE_URL = "http://localhost:8000/api/v1/users";
+
+const BASE_URL = "http://localhost:8000/api/v1/users";
 
 export const api = axios.create({
   baseURL: BASE_URL,
+  headers: {
+    Authorization: `Bearer ${token}`,
+  },
 });
 
-export const getLocalToken = () => {
-  const token = localStorage.getItem("token");
-  if(!token) return;
-  const decodedToken = jwtDecode(token);
-  const userId = decodedToken?.id;
-  return userId;
-};
+// export const getLocalToken = () => {
+//   if (!token) return;
+//   const decodedToken =  jwtDecode(token);
+//   const userId = decodedToken.id;
+//   const role = decodedToken.role;
+//   return {userId, role};
+// };
 
 export const login = async ({ email, password }) => {
   const response = await api.post("/login", { email, password });
@@ -24,26 +28,15 @@ export const login = async ({ email, password }) => {
 
 export const logout = () => {
   localStorage.removeItem("token");
+  localStorage.removeItem("user");
 };
 
-export const isAuthenticated = () => {
-  return !!getLocalToken()
-};
-
-export const signup = async ({ email, password, name, passwordConfirm }) => {
-  const response = await api.post("/signup", {
-    email,
-    password,
-    name,
-    passwordConfirm,
-  });
+export const signup = async (values) => {
+  const response = await api.post("/signup", { ...values });
   return response.data;
 };
 
-export const getCurrentUser = async () => {
-  const userId = getLocalToken();
-
+export const getCurrentUser = async (userId) => {
   const user = await api.get(`${userId}`);
-
   return user.data;
 };

@@ -10,8 +10,8 @@ const useLogin = () => {
         mutationKey: ["users"],
         onSuccess: (data) => {
           console.log(data)
+          localStorage.setItem("token", data.token);
           navigate("/home", {replace: true})
-            localStorage.setItem("token", data.token);
         },
         onError: (err) => {
             toast.error(err.response.data.error);

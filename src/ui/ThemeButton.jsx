@@ -14,7 +14,7 @@ const ThemeButton = () => {
     setIsDarkMode((prevMode) => !prevMode);
   };
   return (
-    <div onClick={handleThemeToggle}>
+    <div onClick={handleThemeToggle} className="cursor-pointer">
       {isDarkMode ? <LuSunMoon size={20} /> : <LuMoon size={20}/>}
     </div>
   );

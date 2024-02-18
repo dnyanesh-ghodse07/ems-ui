@@ -1,14 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
 import { getAttendance } from "../../services/attendanceApi";
-import { getLocalToken } from "../../services/authApi";
 
-const useGetAttendance = () => {
-  const userId = getLocalToken();
+const useGetAttendance = (userId) => {
 
   const { data, isPending } = useQuery({
     queryFn: () => getAttendance(userId),
-    queryKey: ["attendance"],
+    queryKey: ["attendance", userId],
   });
+  
   return { data, isPending };
 };
 

@@ -3,12 +3,13 @@ import Header from "./Header";
 import Sidebar from "./Sidebar";
 
 const AppLayout = () => {
+
   return (
     <div className="flex w-screen h-screen bg-slate-200 ">
       <Sidebar/>
-      <div className="flex-1 dark:bg-slate-600">
+      <div className="flex-1 flex flex-col dark:bg-slate-600">
         <Header />
-        <main className="">
+        <main className="flex-1">
           <Outlet/>
         </main>
       </div>

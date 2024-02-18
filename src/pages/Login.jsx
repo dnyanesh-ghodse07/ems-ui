@@ -1,13 +1,15 @@
 import { useState } from "react";
 import useLogin from "../features/authentication/useLogin";
 import { HiCheck } from "react-icons/hi";
+import { useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
-
+import {jwtDecode} from 'jwt-decode'
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { login, isPending } = useLogin();
+  const queryClient = useQueryClient();
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -18,7 +20,12 @@ const Login = () => {
           setEmail("");
           setPassword("");
         },
-        onSuccess: () => {
+        onSuccess: (data) => {
+          const decodedToken = jwtDecode(data.token);
+          localStorage.setItem("user",JSON.stringify(decodedToken));
+          queryClient.invalidateQueries({
+            queryKey: ["user", ],
+          });
           toast.success(`Log in successfully.`, {
             icon: <HiCheck color="green" />,
           });
@@ -62,6 +69,7 @@ const Login = () => {
             />
           </div>
           <button
+            disabled={isPending}
             type="submit"
             className="w-full rounded-md bg-blue-600 text-slate-100 p-2 mt-2"
           >

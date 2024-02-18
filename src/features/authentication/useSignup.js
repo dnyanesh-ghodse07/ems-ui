@@ -1,19 +1,20 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { signup as signupApi } from "../../services/authApi";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
 
 const useSignup = () => {
-  const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const { mutate: signup, isPending } = useMutation({
-    mutationFn: ({ email, password, name, passwordConfirm }) =>
-      signupApi({ email, password, name, passwordConfirm }),
+    mutationFn: (values) =>
+      signupApi(values),
     onSuccess: () => {
       toast.success("User created successfully");
-      navigate("/login");
+      queryClient.invalidateQueries({
+        queryKey: ["users"],
+      });
     },
     onError: (err) => {
-      toast.error(err.response.data.error);
+      toast.error(err.response.data.message);
     },
   });
   return {

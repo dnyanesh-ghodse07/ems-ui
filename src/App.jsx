@@ -1,15 +1,17 @@
 import "./App.css";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import AppLayout from "./ui/AppLayout";
-import Dashboard from "./pages/Dashboard";
+// import UserDashboard from "./pages/UserDashboard";
 import Login from "./pages/Login";
-import SignUp from "./pages/SignUp";
 import { Toaster } from "react-hot-toast";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import CreateNewUser from "./pages/CreateNewUser";
-import Profile from "./pages/Profile";
-// import { isAuthenticated } from "./services/authApi";
+import Unauthorized from "./pages/Unauthorized";
+// import AdminDashboard from "./pages/AdminDashboard";
+// import withAuth from "./store/withAuth";
+import RouteNotFound from "./pages/RouteNotFound";
+import Dashboard from "./pages/Dashboard";
+import AttendanceList from "./ui/AttendanceList";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -19,8 +21,14 @@ const queryClient = new QueryClient({
   },
 });
 
+// const AuthenticatedAdminDashboard = withAuth(AdminDashboard, ['admin']);
+
 function PrivateRoute({ element }) {
-  return localStorage.getItem("token") ? element : <Navigate to="/login" replace />;
+  return localStorage.getItem("token") ? (
+    element
+  ) : (
+    <Navigate to="/login" replace />
+  );
 }
 
 function App() {
@@ -29,17 +37,17 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <ReactQueryDevtools position="bottom" buttonPosition="bottom-left" />
         <BrowserRouter>
-          <Routes>
-            <Route element={<PrivateRoute element={<AppLayout />} />}>
-              <Route index path="/" element={<Navigate to="home" />} />
-              <Route path="/home" element={<Dashboard />} />
-              <Route path="/new-user" element={<CreateNewUser />} />
-              <Route path="/profile" element={<Profile />} />
-            </Route>
-            {/* <ProtectedRoute path="/" component={<AppLayout/>} /> */}
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<SignUp />} />
-          </Routes>
+            <Routes>
+              <Route element={<PrivateRoute element={<AppLayout />} />}>
+                <Route index path="/" element={<Navigate to="home" />} />
+                <Route path="/home" element={<Dashboard />} />
+                {/* <Route path="/admin" element={<AuthenticatedAdminDashboard />} /> */}
+                <Route path="/unauthorized" element={<Unauthorized />} />
+                <Route path="/attendance" element={<AttendanceList />} />
+              </Route>
+              <Route path="/login" element={<Login />} />
+              <Route path="*" element={<RouteNotFound />} />
+            </Routes>
         </BrowserRouter>
         <Toaster
           position="top-right"

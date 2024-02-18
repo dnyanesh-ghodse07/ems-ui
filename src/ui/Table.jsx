@@ -1,42 +1,54 @@
-import { format } from "date-fns";
-import TableCell from "./TableCell";
-import TableCellHead from "./TableCellHead";
+import { Table as AntTable } from "antd";
+import { differenceInHours, lightFormat } from "date-fns";
 
+const Table = ({ data }) => {
+  console.log(data);
+  const columns = [
+    {
+        title: "Date",
+        dataIndex: "date",
+        key: "date",
+      },
+    {
+      title: "Login",
+      dataIndex: "login",
+      key: "login",
+    },
+    {
+      title: "Logout",
+      dataIndex: "logout",
+      key: "logout",
+    },
+    {
+      title: "Work Time",
+      dataIndex: "workTime",
+      key: "workTime",
+    },
+    {
+      title: "Note",
+      dataIndex: "note",
+      key: "note",
+    },
+  ];
 
-const formateDate = (dt) => {
-    if (!dt) return;
-    return format(dt, "dd/MM/yyyy h:mm a");
-  };
+  const dataSource = data?.data?.attendance?.map((item) => {
+    return {
+      key: item?._id,
+      date: lightFormat(new Date(item?.date), "MM - dd - yyyy"),
+      login: lightFormat(new Date(item?.loginTime), "h:mm:ss a"),
+      logout: item?.logoutTime && lightFormat(new Date(item?.logoutTime), "h:mm:ss a"),
+      workTime: (item?.loginTime && item?.logoutTime) ? differenceInHours(
+        new Date(item?.logoutTime),
+        new Date(item?.loginTime)
+      ) : "--",
+    };
+  });
 
-const Table = ({data: employeesAttendance}) => {
   return (
-    <table className="w-full border-collapse border border-slate-500">
-    <thead>
-      <tr className="">
-        <TableCellHead className="border border-slate-600">
-          Login
-        </TableCellHead>
-        <TableCellHead className="border border-slate-600">
-          Logout
-        </TableCellHead>
-        <TableCellHead className="border border-slate-600">
-          Note
-        </TableCellHead>
-      </tr>
-    </thead>
-    <tbody className="overflow-scroll">
-      {employeesAttendance?.data?.attendance?.map((item) => {
-        return (
-          <tr key={item._id}>
-            <TableCell>{formateDate(item?.loginTime)}</TableCell>
-            <TableCell>{formateDate(item?.logoutTime)}</TableCell>
-            <TableCell>{item?.note}</TableCell>
-          </tr>
-        );
-      })}
-    </tbody>
-  </table>
-  )
-}
+    <div>
+      <AntTable bordered dataSource={dataSource} columns={columns} />
+    </div>
+  );
+};
 
-export default Table
+export default Table;

@@ -6,17 +6,23 @@ import { logout } from "../services/authApi";
 const Header = () => {
   const navigate = useNavigate();
   const handleLogout = () => {
-    logout()
-    navigate("/login")
+    logout();
+    navigate("/login");
   };
 
+  const user = JSON.parse(localStorage.getItem("user"));
   return (
     <div className="dark:bg-slate-800 dark:text-slate-100 bg-slate-100 text-slate-800 p-4 flex justify-around">
-      <h1>Header</h1>
-      <ThemeButton />
-      <Button className="dark:text-slate-100" onClick={handleLogout}>
-        Logout
-      </Button>
+      <div className="flex gap-6 items-center">
+        <h1 className="text-xl">Employee Management Dashboard</h1>
+      </div>
+      <div className="flex gap-6 items-center">
+        <h2>{user?.role}</h2>
+        <ThemeButton />
+        <Button className="dark:text-slate-100" onClick={handleLogout}>
+          Logout
+        </Button>
+      </div>
     </div>
   );
 };

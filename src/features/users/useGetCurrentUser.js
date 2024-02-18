@@ -1,16 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
 import { getCurrentUser } from "../../services/authApi";
 
-const useGetUser = () => {
+const useGetCurrentUser = (userId) => {
   const { data: user, isPending } = useQuery({
-    queryFn: getCurrentUser,
-    queryKey:["user"]
+    queryFn: () => getCurrentUser(userId),
+    queryKey:["user"] ,
   });
-
   return {
-    user: user?.data?.user,
+    user,
     isPending,
   };
 };
 
-export default useGetUser;
+export default useGetCurrentUser;
