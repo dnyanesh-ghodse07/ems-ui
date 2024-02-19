@@ -2,6 +2,7 @@ import { LoaderIcon } from "react-hot-toast";
 import UserCard from "./UserCard";
 import useGetAllUsers from "../features/users/useGetAllUsers";
 import CreateNewUser from "../pages/CreateNewUser";
+import withAuth from "../store/withAuth";
 import { useState } from "react";
 import { Button } from "antd";
 
@@ -39,4 +40,4 @@ const AllUsersList = () => {
   );
 };
 
-export default AllUsersList;
+export default withAuth(AllUsersList, ["admin"]);

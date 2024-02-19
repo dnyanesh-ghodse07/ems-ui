@@ -2,13 +2,14 @@ import useGetAttendance from "../features/attendance/useGetAttendance";
 import useUpdateAttendance from "../features/attendance/useUpdateAttendance";
 import useCreateAttendance from "../features/attendance/useCreateAttendance";
 import useGetCurrentUser from "../features/users/useGetCurrentUser";
-import getDateDifferenceWithFormat from '../utils/getDateDifferenceWithFormat';
+import getDateDifferenceWithFormat from "../utils/getDateDifferenceWithFormat";
 import { Button, Card, Table } from "antd";
 import getUserIdRole from "../utils/getUserIdRole";
-import { lightFormat } from "date-fns";
+import { isToday, lightFormat } from "date-fns";
+import toast from "react-hot-toast";
 
 const Dashboard = () => {
-  const {id} = getUserIdRole();
+  const { id } = getUserIdRole();
   const { data: employeesAttendance, isPending: tableLoading } =
     useGetAttendance(id);
   const { updateAttendance, isPending: updateLoading } = useUpdateAttendance();
@@ -17,12 +18,8 @@ const Dashboard = () => {
   const { user: userData, isPending } = useGetCurrentUser(id);
 
   const checkIsToday = (employeesAttendance) => {
-    const todayDate = new Date().toISOString().split("T")[0];
-    const checkIsToday = employeesAttendance?.data?.attendance.filter(
-      (obj) => {
-        console.log(obj.date.split("T")[0])
-        return obj.date.split("T")[0] === todayDate
-      }
+    const checkIsToday = employeesAttendance?.data?.attendance.filter((obj) =>
+      isToday(obj?.date)
     );
     return checkIsToday;
   };
@@ -31,6 +28,8 @@ const Dashboard = () => {
     const time = new Date().toISOString();
     if (!checkIsToday(employeesAttendance)?.length) {
       createAttendance({ user: id, time, timeTag: "login" });
+    }else{
+      toast.error("You are already checked in")
     }
   };
   const handleAttendanceLogout = () => {
@@ -42,10 +41,10 @@ const Dashboard = () => {
 
   const columns = [
     {
-        title: "Date",
-        dataIndex: "date",
-        key: "date",
-      },
+      title: "Date",
+      dataIndex: "date",
+      key: "date",
+    },
     {
       title: "Login",
       dataIndex: "login",
@@ -73,11 +72,16 @@ const Dashboard = () => {
       key: item?._id,
       date: lightFormat(new Date(item?.date), "MM - dd - yyyy"),
       login: lightFormat(new Date(item?.loginTime), "h:mm:ss a"),
-      logout: item?.logoutTime && lightFormat(new Date(item?.logoutTime), "h:mm:ss a"),
-      workTime: (item?.loginTime && item?.logoutTime) ? getDateDifferenceWithFormat(
-        new Date(item?.logoutTime),
-        new Date(item?.loginTime)
-      ) : "--",
+      logout:
+        item?.logoutTime &&
+        lightFormat(new Date(item?.logoutTime), "h:mm:ss a"),
+      workTime:
+        item?.loginTime && item?.logoutTime
+          ? getDateDifferenceWithFormat(
+              new Date(item?.logoutTime),
+              new Date(item?.loginTime)
+            )
+          : "--",
     };
   });
 
