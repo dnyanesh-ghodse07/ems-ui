@@ -11,7 +11,7 @@ import toast from "react-hot-toast";
 const Dashboard = () => {
   const { id } = getUserIdRole();
   const { data: employeesAttendance, isPending: tableLoading } =
-    useGetAttendance(id);
+    useGetAttendance();
   const { updateAttendance, isPending: updateLoading } = useUpdateAttendance();
   const { createAttendance, isPending: attendanceLoading } =
     useCreateAttendance();

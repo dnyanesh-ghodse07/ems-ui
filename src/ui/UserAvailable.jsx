@@ -11,10 +11,12 @@ import {
 } from "recharts";
 import { isToday } from "date-fns";
 import useGetAllUsers from "../features/users/useGetAllUsers";
+import getUserIdRole from "../utils/getUserIdRole";
 
 const UserAvailable = () => {
   const { data, isPending } = useGetAllAttendance();
-  const { allUsers, isPending: userLoading } = useGetAllUsers();
+  const { id } = getUserIdRole();
+  const { allUsers, isPending: userLoading } = useGetAllUsers(id);
   // const available = allUsers
   const availableEmployees = data?.data?.attendance.map((item) => {
     return {

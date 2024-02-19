@@ -1,11 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import { getAttendance } from "../../services/attendanceApi";
+import getUserIdRole from "../../utils/getUserIdRole";
 
-const useGetAttendance = (userId) => {
-
+const useGetAttendance = () => {
+const {id} = getUserIdRole()
   const { data, isPending } = useQuery({
-    queryFn: () => getAttendance(userId),
-    queryKey: ["attendance", userId],
+    queryFn: () => getAttendance(id),
+    queryKey: ["attendance", id],
   });
   
   return { data, isPending };

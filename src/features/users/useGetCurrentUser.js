@@ -4,7 +4,7 @@ import { getCurrentUser } from "../../services/authApi";
 const useGetCurrentUser = (userId) => {
   const { data: user, isPending } = useQuery({
     queryFn: () => getCurrentUser(userId),
-    queryKey:["user"] ,
+    queryKey:["user", userId] ,
   });
   return {
     user,

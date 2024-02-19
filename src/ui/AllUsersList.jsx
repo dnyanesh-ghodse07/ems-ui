@@ -5,10 +5,12 @@ import CreateNewUser from "../pages/CreateNewUser";
 import withAuth from "../store/withAuth";
 import { useState } from "react";
 import { Button } from "antd";
+import getUserIdRole from "../utils/getUserIdRole";
 
 const AllUsersList = () => {
+  const { id } = getUserIdRole();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { allUsers, isPending } = useGetAllUsers();
+  const { allUsers, isPending } = useGetAllUsers(id);
 
   const showModal = () => {
     setIsModalOpen(true);

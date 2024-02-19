@@ -23,11 +23,11 @@ const Login = () => {
         onSuccess: (data) => {
           const decodedToken = jwtDecode(data.token);
           localStorage.setItem("user",JSON.stringify(decodedToken));
-          queryClient.invalidateQueries({
-            queryKey: ["user", ],
-          });
           toast.success(`Log in successfully.`, {
             icon: <HiCheck color="green" />,
+          });
+          queryClient.invalidateQueries({
+            queryKey: ["user"],
           });
         },
       }
