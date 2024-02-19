@@ -41,7 +41,6 @@ function App() {
               <Route element={<PrivateRoute element={<AppLayout />} />}>
                 <Route index path="/" element={localStorage.getItem("token") ? <Navigate to="/home" /> : <Navigate to="/login" />} />
                 <Route path="/home" element={<Dashboard />} />
-                {/* <Route path="/admin" element={<AuthenticatedAdminDashboard />} /> */}
                 <Route path="/unauthorized" element={<Unauthorized />} />
                 <Route path="/attendance" element={<AttendanceList />} />
               </Route>
