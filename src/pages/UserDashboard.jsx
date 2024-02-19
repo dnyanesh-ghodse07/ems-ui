@@ -1,32 +1,23 @@
 import useGetAttendance from "../features/attendance/useGetAttendance";
 import useUpdateAttendance from "../features/attendance/useUpdateAttendance";
-// import Button from "../ui/Button";
 import useCreateAttendance from "../features/attendance/useCreateAttendance";
-// import DashboardCard from "../ui/DashboardCard";
-// import ListItem from "../ui/ListItem";
-// import AdminDashboard from "./AdminDashboard";
-// import Table from "../ui/Table";
 import useGetCurrentUser from "../features/users/useGetCurrentUser";
-import Table from "../ui/Table";
-import { Button, Card } from "antd";
-// import { LoaderMini } from "../ui/LoaderMini";
+import getDateDifferenceWithFormat from '../utils/getDateDifferenceWithFormat';
+import { Button, Card, Table } from "antd";
+import getUserIdRole from "../utils/getUserIdRole";
+import { lightFormat } from "date-fns";
 
 const Dashboard = () => {
-  const user = JSON.parse(localStorage.getItem("user"));
+  const {id} = getUserIdRole();
   const { data: employeesAttendance, isPending: tableLoading } =
-    useGetAttendance(user?.id);
+    useGetAttendance(id);
   const { updateAttendance, isPending: updateLoading } = useUpdateAttendance();
   const { createAttendance, isPending: attendanceLoading } =
     useCreateAttendance();
-    console.log(employeesAttendance)
-
-  const { user: userData, isPending } = useGetCurrentUser(user?.id);
-  console.log(userData);
+  const { user: userData, isPending } = useGetCurrentUser(id);
 
   const checkIsToday = (employeesAttendance) => {
     const todayDate = new Date().toISOString().split("T")[0];
-    console.log(todayDate);
-
     const checkIsToday = employeesAttendance?.data?.attendance.filter(
       (obj) => {
         console.log(obj.date.split("T")[0])
@@ -37,20 +28,58 @@ const Dashboard = () => {
   };
 
   const handleAttendanceLogin = () => {
-    console.log(checkIsToday(employeesAttendance));
     const time = new Date().toISOString();
     if (!checkIsToday(employeesAttendance)?.length) {
-      createAttendance({ user: user?.id, time, timeTag: "login" });
+      createAttendance({ user: id, time, timeTag: "login" });
     }
   };
   const handleAttendanceLogout = () => {
     const time = new Date().toISOString();
     if (checkIsToday(employeesAttendance)?.length) {
-      updateAttendance({ user: user?.id, time, timeTag: "logout" });
+      updateAttendance({ user: id, time, timeTag: "logout" });
     }
   };
 
-  console.log(tableLoading);
+  const columns = [
+    {
+        title: "Date",
+        dataIndex: "date",
+        key: "date",
+      },
+    {
+      title: "Login",
+      dataIndex: "login",
+      key: "login",
+    },
+    {
+      title: "Logout",
+      dataIndex: "logout",
+      key: "logout",
+    },
+    {
+      title: "Work Time",
+      dataIndex: "workTime",
+      key: "workTime",
+    },
+    {
+      title: "Note",
+      dataIndex: "note",
+      key: "note",
+    },
+  ];
+
+  const dataSource = employeesAttendance?.data?.attendance?.map((item) => {
+    return {
+      key: item?._id,
+      date: lightFormat(new Date(item?.date), "MM - dd - yyyy"),
+      login: lightFormat(new Date(item?.loginTime), "h:mm:ss a"),
+      logout: item?.logoutTime && lightFormat(new Date(item?.logoutTime), "h:mm:ss a"),
+      workTime: (item?.loginTime && item?.logoutTime) ? getDateDifferenceWithFormat(
+        new Date(item?.logoutTime),
+        new Date(item?.loginTime)
+      ) : "--",
+    };
+  });
 
   return (
     <>
@@ -137,7 +166,7 @@ const Dashboard = () => {
           </div> */}
         <div className="w-full text-slate-800 h-56 rounded-lg">
           {tableLoading && <h1>Loading...</h1>}
-          <Table data={employeesAttendance} />
+          <Table dataSource={dataSource} columns={columns} />
         </div>
       </div>
       {/* )} */}

@@ -1,6 +1,7 @@
+import getUserIdRole from "../utils/getUserIdRole";
 import { api } from "./authApi";
 
-const currentUser = JSON.parse(localStorage.getItem("user"));
+const {id} = getUserIdRole();
 
 export const createAttendance = async ({ user, time, timeTag, note }) => {
   let payload =
@@ -14,7 +15,7 @@ export const createAttendance = async ({ user, time, timeTag, note }) => {
 };
 
 export const getAttendance = async () => {
-  const response = await api.get(`/attendance/${currentUser?.id}`);
+  const response = await api.get(`/attendance/${id}`);
   return response.data;
 };
 

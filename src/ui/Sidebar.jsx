@@ -2,6 +2,12 @@ import { Button } from "antd";
 import { HiHome, HiUsers, HiOutlineClipboardList } from "react-icons/hi";
 import getUserIdRole from "../utils/getUserIdRole";
 import { Link } from "react-router-dom";
+/*
+TODO:
+  password reset & email verification functionality
+  USER: add tasks functionality
+  ADMIN: delete edit users
+*/
 const Sidebar = () => {
   const { role } = getUserIdRole();
   return (
@@ -11,6 +17,10 @@ const Sidebar = () => {
         <Button className="text-left" icon={<HiHome />}>
           <Link to="/">Home</Link>
         </Button>
+        {/* <Button className="text-left" icon={<HiHome />}>
+          <Link to="/">Task</Link>
+        </Button> */}
+        
         {role !== "user" && (
           <>
             <Button icon={<HiUsers />}>

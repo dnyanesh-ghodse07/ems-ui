@@ -1,12 +1,12 @@
 import withAuth from "../store/withAuth";
+import getUserIdRole from "../utils/getUserIdRole";
 import AdminDashboard from "./AdminDashboard";
 import UserDashboard from "./UserDashboard";
 
 const AuthenticatedAdminDashboard = withAuth(AdminDashboard, ["admin"]);
 
 const Dashboard = () => {
-  const user = JSON.parse(localStorage.getItem("user"));
-  const role = user.role;
+  const {role} = getUserIdRole();
 
   return (
     <>

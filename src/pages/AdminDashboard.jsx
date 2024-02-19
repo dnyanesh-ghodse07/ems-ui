@@ -1,17 +1,13 @@
 import { Button } from "antd";
-// import Users from "../ui/Users";
 import { useState } from "react";
 import CreateNewUser from "./CreateNewUser";
 import useGetAllUsers from "../features/users/useGetAllUsers";
 import AllUsersList from "../ui/AllUsersList";
-// import useGetAllAttendance from "../features/attendance/useGetAllAttendance";
-// import { LoaderIcon } from "react-hot-toast";
+
 
 const AdminDashboard = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const {allUsers, isPending} = useGetAllUsers();
-  console.log(allUsers?.data?.users)
-  // const {data: attendance, isPending} = useGetAllAttendance()
   const showModal = () => {
     setIsModalOpen(true);
   };
@@ -26,16 +22,7 @@ const AdminDashboard = () => {
           Create New User
         </Button>
       </div>
-      {/* <Users /> */}
       <CreateNewUser isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen}/>
-      {/* <div>
-        {isPending && <LoaderIcon/>}
-        {
-          attendance?.data?.attendance?.map(item => {
-            return <>sfd</>
-          })
-        }
-      </div> */}
       <AllUsersList allUsers={allUsers} isPending={isPending}/>
     </div>
   );
