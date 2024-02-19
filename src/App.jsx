@@ -39,7 +39,7 @@ function App() {
         <BrowserRouter>
             <Routes>
               <Route element={<PrivateRoute element={<AppLayout />} />}>
-                <Route index path="/" element={<Navigate to="home" />} />
+                <Route index path="/" element={localStorage.getItem("token") ? <Navigate to="/home" /> : <Navigate to="/login" />} />
                 <Route path="/home" element={<Dashboard />} />
                 {/* <Route path="/admin" element={<AuthenticatedAdminDashboard />} /> */}
                 <Route path="/unauthorized" element={<Unauthorized />} />
