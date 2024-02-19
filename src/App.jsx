@@ -1,17 +1,17 @@
 import "./App.css";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import AppLayout from "./ui/AppLayout";
-// import UserDashboard from "./pages/UserDashboard";
+
 import Login from "./pages/Login";
 import { Toaster } from "react-hot-toast";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import Unauthorized from "./pages/Unauthorized";
-// import AdminDashboard from "./pages/AdminDashboard";
-// import withAuth from "./store/withAuth";
+
 import RouteNotFound from "./pages/RouteNotFound";
 import Dashboard from "./pages/Dashboard";
 import AttendanceList from "./ui/AttendanceList";
+import AllUsersList from "./ui/AllUsersList";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -41,8 +41,9 @@ function App() {
               <Route element={<PrivateRoute element={<AppLayout />} />}>
                 <Route index path="/" element={localStorage.getItem("token") ? <Navigate to="/home" /> : <Navigate to="/login" />} />
                 <Route path="/home" element={<Dashboard />} />
-                <Route path="/unauthorized" element={<Unauthorized />} />
                 <Route path="/attendance" element={<AttendanceList />} />
+                <Route path="/employees" element={<AllUsersList />} />
+                <Route path="/unauthorized" element={<Unauthorized />} />
               </Route>
               <Route path="/login" element={<Login />} />
               <Route path="*" element={<RouteNotFound />} />
