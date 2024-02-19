@@ -8,10 +8,10 @@ TODO:
   USER: add tasks functionality
   ADMIN: delete edit users
 */
-const Sidebar = () => {
+const Sidebar = ({isMobile}) => {
   const { role } = getUserIdRole();
   return (
-    <div className="h-full dark:bg-slate-800 dark:text-slate-100 bg-slate-100 text-slate-800 p-4">
+    <div className={`${!isMobile ? "hidden" : ""}  sm:block h-full dark:bg-slate-800 dark:text-slate-100 bg-slate-100 text-slate-800 p-4`}>
       <h1 className="mb-4 text-2xl text-center">Vionsys</h1>
       <div className="flex flex-col gap-2">
         <Button className="text-left" icon={<HiHome />}>
