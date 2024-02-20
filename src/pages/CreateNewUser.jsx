@@ -1,5 +1,5 @@
 import { Button, Form, Input, Modal, Select } from "antd";
-import {HiXCircle} from 'react-icons/hi'
+import { HiXCircle } from "react-icons/hi";
 import useSignup from "../features/authentication/useSignup";
 
 const CreateNewUser = ({ isModalOpen, setIsModalOpen }) => {
@@ -11,7 +11,7 @@ const CreateNewUser = ({ isModalOpen, setIsModalOpen }) => {
 
   const onFinish = (values) => {
     signup(values, {
-      onSuccess: () => {
+      onSettled: () => {
         handleCancel();
       },
     });
@@ -21,7 +21,7 @@ const CreateNewUser = ({ isModalOpen, setIsModalOpen }) => {
       <Modal
         title="Create new user"
         open={isModalOpen}
-        closeIcon={<HiXCircle size={25} onClick={handleCancel}/>}
+        closeIcon={<HiXCircle size={25} onClick={handleCancel} />}
         footer={false}
       >
         <Form
@@ -123,7 +123,12 @@ const CreateNewUser = ({ isModalOpen, setIsModalOpen }) => {
           </div>
 
           <Form.Item>
-            <Button type="primary" className="bg-slate-600 hover:bg-slate-500" htmlType="submit" loading={isPending}>
+            <Button
+              type="primary"
+              className="bg-slate-600 hover:bg-slate-500"
+              htmlType="submit"
+              loading={isPending}
+            >
               Create
             </Button>
           </Form.Item>
