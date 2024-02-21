@@ -1,19 +1,14 @@
-import { Card, Dropdown } from "antd";
-import { HiOutlineDotsVertical } from "react-icons/hi";
+import { Card } from "antd";
+// import useDeleteUser from "../features/users/useDeleteUser";
 
 const { Meta } = Card;
 
 const UserCard = ({ item }) => {
-  const items = [
-    {
-      label: <div>Delete</div>,
-      key: "0",
-    },
-    {
-      label: <div>Edit</div>,
-      key: "1",
-    }
-  ];
+  // const { deleteUser, isPending } = useDeleteUser();
+
+  // const handleDelete = (id) => {
+  //   deleteUser(id);
+  // }
   return (
     <Card>
       <Meta title={`${item.firstName} ${item.lastName}`} />
@@ -24,15 +19,6 @@ const UserCard = ({ item }) => {
         <div className="">Team Lead : {item?.teamLead}</div>
         <div></div>
       </div>
-      <Dropdown
-        className="absolute top-2 right-2"
-        menu={{
-          items,
-        }}
-        trigger={["click"]}
-      >
-        <HiOutlineDotsVertical className="cursor-pointer" />
-      </Dropdown>
     </Card>
   );
 };

@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteUserApi } from "../../services/usersApi";
+import toast from "react-hot-toast";
 
 export const useDeleteUser = () => {
   console.log("DELETE");
@@ -11,6 +12,7 @@ export const useDeleteUser = () => {
       queryClient.invalidateQueries({
         queryKey: ["users"],
       });
+      toast.success("User deleted successfully !")
     },
   });
 

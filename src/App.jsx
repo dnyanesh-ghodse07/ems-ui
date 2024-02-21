@@ -12,6 +12,7 @@ import RouteNotFound from "./pages/RouteNotFound";
 import Dashboard from "./pages/Dashboard";
 import AttendanceList from "./ui/AttendanceList";
 import AllUsersList from "./ui/AllUsersList";
+import UserDetails from "./pages/UserDetails";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -23,13 +24,13 @@ const queryClient = new QueryClient({
 
 // const AuthenticatedAdminDashboard = withAuth(AdminDashboard, ['admin']);
 
-function PrivateRoute({ element }) {
-  return localStorage.getItem("token") ? (
-    element
-  ) : (
-    <Navigate to="/login" replace />
-  );
-}
+// function PrivateRoute({ element }) {
+//   return localStorage.getItem("token") ? (
+//     element
+//   ) : (
+//     <Navigate to="/login" replace />
+//   );
+// }
 
 function App() {
   return (
@@ -38,15 +39,24 @@ function App() {
         <ReactQueryDevtools position="bottom" buttonPosition="bottom-left" />
         <BrowserRouter>
             <Routes>
-              <Route element={<PrivateRoute element={<AppLayout />} />}>
-                <Route index path="/" element={localStorage.getItem("token") ? <Navigate to="/home" /> : <Navigate to="/login" />} />
+              <Route path="/login" element={<Login />} />
+              <Route
+                element={
+                  localStorage.getItem("token") ? (
+                    <AppLayout />
+                  ) : (
+                    <Navigate to="/login" replace />
+                  )
+                }
+              >
+                <Route index element={<Navigate to="/home" />} />
                 <Route path="/home" element={<Dashboard />} />
                 <Route path="/attendance" element={<AttendanceList />} />
                 <Route path="/employees" element={<AllUsersList />} />
+                <Route path="/employees/:userId" element={<UserDetails />} />
                 <Route path="/unauthorized" element={<Unauthorized />} />
+                <Route path="*" element={<RouteNotFound />} />
               </Route>
-              <Route path="/login" element={<Login />} />
-              <Route path="*" element={<RouteNotFound />} />
             </Routes>
         </BrowserRouter>
         <Toaster

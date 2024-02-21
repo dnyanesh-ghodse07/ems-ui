@@ -10,14 +10,9 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { isToday } from "date-fns";
-import useGetAllUsers from "../features/users/useGetAllUsers";
-import getUserIdRole from "../utils/getUserIdRole";
 
 const UserAvailable = () => {
   const { data, isPending } = useGetAllAttendance();
-  const { id } = getUserIdRole();
-  const { allUsers, isPending: userLoading } = useGetAllUsers(id);
-  // const available = allUsers
   const availableEmployees = data?.data?.attendance.map((item) => {
     return {
       name: `${item.user.firstName}`,
@@ -25,13 +20,12 @@ const UserAvailable = () => {
         .length,
     };
   });
-  const total = allUsers?.data?.users?.length - 1;
   const available = availableEmployees?.filter((item) => item.date)?.length;
   const unAvailable = availableEmployees?.filter((item) => !item.date)?.length;
 
   const chartData = [
-    { name: "Available", value: total / available },
-    { name: "Unavailable", value: total / unAvailable },
+    { name: "Available", value: available },
+    { name: "Unavailable", value: unAvailable},
   ];
   const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
@@ -65,7 +59,6 @@ const UserAvailable = () => {
             </Avatar.Group>
           </div>
           <div className="">
-            {userLoading && <LoaderIcon />}
             <ResponsiveContainer minHeight={240} minWidth={240}>
               <PieChart>
                 <Pie
@@ -86,7 +79,11 @@ const UserAvailable = () => {
                   ))}
                 </Pie>
                 <Tooltip />
-                <Legend align="right" verticalAlign="middle" layout="vertical" />
+                <Legend
+                  align="right"
+                  verticalAlign="middle"
+                  layout="vertical"
+                />
               </PieChart>
             </ResponsiveContainer>
           </div>
